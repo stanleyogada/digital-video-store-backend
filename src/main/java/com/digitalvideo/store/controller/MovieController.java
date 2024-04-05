@@ -3,13 +3,15 @@ package com.digitalvideo.store.controller;
 import com.digitalvideo.store.model.Movie;
 import com.digitalvideo.store.service.MovieService;
 import com.digitalvideo.store.types.ErrorResponse;
-import com.digitalvideo.store.types.MovieRequest;
 import com.digitalvideo.store.types.SuccessResponse;
 
+import jakarta.validation.Valid;
+import jakarta.validation.executable.ValidateOnExecution;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +26,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/movies")
 @RequiredArgsConstructor
+@Validated
+@ValidateOnExecution
 public class MovieController {
 
   private final MovieService movieService;
@@ -71,11 +75,8 @@ public class MovieController {
   }
 
   @PostMapping
-  public ResponseEntity<?> createMovie(@RequestBody Movie movie) {
+  public ResponseEntity<?> createMovie(@Valid @RequestBody Movie movie) {
     try {
-
-      System.out.println("Movie: " + movie.toString());
-
       Movie createdMovie = movieService.createMovie(movie);
       SuccessResponse<Movie> response = new SuccessResponse<>(createdMovie);
       return new ResponseEntity<>(response, HttpStatus.CREATED);
