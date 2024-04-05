@@ -42,13 +42,7 @@ public class MovieController {
       return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    if (isTvShow == null) {
-      List<Movie> movies = movieService.getAllMovies(isFeatured, false);
-      SuccessResponse<List<Movie>> response = new SuccessResponse<>(movies);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    List<Movie> movies = movieService.getAllMovies(isFeatured, true);
+    List<Movie> movies = movieService.getAllMovies(isFeatured, isTvShow != null && isTvShow);
     SuccessResponse<List<Movie>> response = new SuccessResponse<>(movies);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
