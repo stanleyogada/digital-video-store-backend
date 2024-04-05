@@ -28,7 +28,14 @@ public class MovieController {
   @GetMapping
   public ResponseEntity<SuccessResponse<List<Movie>>> getAllMovies(
       @RequestParam(name = "is_tv_show", required = false) Boolean isTvShow,
-      @RequestParam(name = "is_featured", required = false) Boolean isFeatured) {
+      @RequestParam(name = "is_featured", required = false) Boolean isFeatured,
+      @RequestParam(name = "title", required = false) String title) {
+
+    if (title != null) {
+      List<Movie> movies = movieService.searchMoviesByTitle(title);
+      SuccessResponse<List<Movie>> response = new SuccessResponse<>(movies);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     if (isTvShow != null && isFeatured == null) {
       List<Movie> movies = movieService.getAllMovies(isTvShow);

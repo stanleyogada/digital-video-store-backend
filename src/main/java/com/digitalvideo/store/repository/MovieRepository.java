@@ -10,4 +10,6 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
   List<Movie> findByIsFeaturedAndIsTvShow(boolean isFeatured, boolean isTvShow);
 
   List<Movie> findByIsTvShow(boolean isTvShow);
+
+  List<Movie> findByNameContainingIgnoreCase(String name);
 }

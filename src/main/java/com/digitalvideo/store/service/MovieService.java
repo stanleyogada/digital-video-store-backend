@@ -22,6 +22,10 @@ public class MovieService {
     return movieRepository.findByIsTvShow(isTvShow);
   }
 
+  public List<Movie> searchMoviesByTitle(String name) {
+    return movieRepository.findByNameContainingIgnoreCase(name);
+  }
+
   public Optional<Movie> getMovieById(String id) {
     return movieRepository.findById(id);
   }
