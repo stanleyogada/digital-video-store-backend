@@ -76,6 +76,43 @@ public class MovieController {
 
   @PostMapping
   public ResponseEntity<?> createMovie(@Valid @RequestBody Movie movie) {
+
+    String name = movie.getName();
+
+    List<Movie> movies = movieService.searchMoviesByTitle(name);
+
+    if (movies.size() > 0) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie already exists");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    String synopsis = movie.getSynopsis();
+    double priceRent = movie.getPriceRent();
+    double priceBuy = movie.getPriceBuy();
+    String posterImg = movie.getPosterImg();
+    String posterLargeImg = movie.getPosterLargeImg();
+
+    if (name == null || name.isEmpty()) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie name is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (synopsis == null || synopsis.isEmpty()) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie synopsis is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (priceRent <= 2 || priceBuy <= 2) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie price must be greater than 2");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (posterImg == null || posterImg.isEmpty()) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie poster image is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (posterLargeImg == null || posterLargeImg.isEmpty()) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie large poster image is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     try {
       Movie createdMovie = movieService.createMovie(movie);
       SuccessResponse<Movie> response = new SuccessResponse<>(createdMovie);
