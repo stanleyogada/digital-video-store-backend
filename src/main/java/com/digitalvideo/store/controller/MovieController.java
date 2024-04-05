@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/api/v1/movies")
@@ -92,17 +93,70 @@ public class MovieController {
     String posterImg = movie.getPosterImg();
     String posterLargeImg = movie.getPosterLargeImg();
 
-    // Check if isTvShow is provided
+    if (name == null || name.isEmpty()) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie name is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (synopsis == null || synopsis.isEmpty()) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie synopsis is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (priceRent <= 2 || priceBuy <= 2) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie price must be greater than 2");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (posterImg == null || posterImg.isEmpty()) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie poster image is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (posterLargeImg == null || posterLargeImg.isEmpty()) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie large poster image is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     if (!movie.isTvShow()) {
       ErrorResponse<String> response = new ErrorResponse<>("isTvShow field is required");
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // Check if isFeatured is provided
     if (!movie.isFeatured()) {
       ErrorResponse<String> response = new ErrorResponse<>("isFeatured field is required");
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    try {
+      Movie createdMovie = movieService.createMovie(movie);
+      SuccessResponse<Movie> response = new SuccessResponse<>(createdMovie);
+      return new ResponseEntity<>(response, HttpStatus.CREATED);
+    } catch (Exception e) {
+      ErrorResponse<String> response = new ErrorResponse<>("Failed to create movie: " + e.getMessage());
+      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<?> updateMovie(@PathVariable String id, @RequestBody Movie movie) {
+    Optional<Movie> existingMovie = movieService.getMovieById(id);
+
+    if (existingMovie.isEmpty()) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie or TV Show not found");
+      return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    String name = movie.getName();
+
+    List<Movie> movies = movieService.searchMoviesByTitle(name);
+    if (movies.size() > 0 && !movies.get(0).getName().equals(name)) {
+      ErrorResponse<String> response = new ErrorResponse<>(
+          "Change the name to something else a movie has this already");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    String synopsis = movie.getSynopsis();
+    double priceRent = movie.getPriceRent();
+    double priceBuy = movie.getPriceBuy();
+    String posterImg = movie.getPosterImg();
+    String posterLargeImg = movie.getPosterLargeImg();
 
     if (name == null || name.isEmpty()) {
       ErrorResponse<String> response = new ErrorResponse<>("Movie name is required");
@@ -125,13 +179,38 @@ public class MovieController {
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    try {
-      Movie createdMovie = movieService.createMovie(movie);
-      SuccessResponse<Movie> response = new SuccessResponse<>(createdMovie);
-      return new ResponseEntity<>(response, HttpStatus.CREATED);
-    } catch (Exception e) {
-      ErrorResponse<String> response = new ErrorResponse<>("Failed to create movie: " + e.getMessage());
-      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    if (name.length() < 2) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie name must be at least 2 characters long");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+    if (synopsis.length() < 2) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie synopsis must be at least 2 characters long");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (posterImg.length() < 6) {
+      ErrorResponse<String> response = new ErrorResponse<>("Movie poster image must be at least 6 characters long");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    if (posterLargeImg.length() < 6) {
+      ErrorResponse<String> response = new ErrorResponse<>(
+          "Movie large poster image must be at least 6 characters long");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // if (!movie.isTvShow()) {
+    // ErrorResponse<String> response = new ErrorResponse<>("isTvShow field is
+    // required");
+    // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    // }
+    // if (!movie.isFeatured()) {
+    // ErrorResponse<String> response = new ErrorResponse<>("isFeatured field is
+    // required");
+    // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    // }
+
+    Movie updatedMovie = movieService.updateMovie(id, movie);
+
+    SuccessResponse<Movie> response = new SuccessResponse<>(updatedMovie);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }

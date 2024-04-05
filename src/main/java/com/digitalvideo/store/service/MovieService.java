@@ -44,4 +44,25 @@ public class MovieService {
 
     return movieRepository.save(newMovie);
   }
+
+  public Movie updateMovie(String id, Movie movie) {
+    Optional<Movie> existingMovie = this.getMovieById(id);
+
+    if (existingMovie.isEmpty()) {
+      return null;
+    }
+
+    Movie updatedMovie = existingMovie.get();
+
+    updatedMovie.setName(movie.getName());
+    updatedMovie.setSynopsis(movie.getSynopsis());
+    updatedMovie.setPriceRent(movie.getPriceRent());
+    updatedMovie.setPriceBuy(movie.getPriceBuy());
+    updatedMovie.setPosterImg(movie.getPosterImg());
+    updatedMovie.setPosterLargeImg(movie.getPosterLargeImg());
+    updatedMovie.setIsTvShow(movie.isTvShow());
+    updatedMovie.setIsFeatured(movie.isFeatured());
+
+    return movieRepository.save(updatedMovie);
+  }
 }
