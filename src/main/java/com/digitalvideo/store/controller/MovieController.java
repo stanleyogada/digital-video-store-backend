@@ -197,17 +197,6 @@ public class MovieController {
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // if (!movie.isTvShow()) {
-    // ErrorResponse<String> response = new ErrorResponse<>("isTvShow field is
-    // required");
-    // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    // }
-    // if (!movie.isFeatured()) {
-    // ErrorResponse<String> response = new ErrorResponse<>("isFeatured field is
-    // required");
-    // return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    // }
-
     Movie updatedMovie = movieService.updateMovie(id, movie);
 
     SuccessResponse<Movie> response = new SuccessResponse<>(updatedMovie);
