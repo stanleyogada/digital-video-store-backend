@@ -18,4 +18,8 @@ public class CustomerService {
   public Optional<User> getCustomerById(String id) {
     return customerRepository.findById(id);
   }
+
+  public Optional<User> getCustomerByEmail(String email) {
+    return customerRepository.findByEmail(email);
+  }
 }
