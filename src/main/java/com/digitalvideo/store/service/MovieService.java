@@ -65,4 +65,15 @@ public class MovieService {
 
     return movieRepository.save(updatedMovie);
   }
+
+  public String deleteMovie(String id) {
+    Optional<Movie> movie = this.getMovieById(id);
+
+    if (movie.isEmpty()) {
+      return "fail";
+    }
+
+    movieRepository.deleteById(id);
+    return "success";
+  }
 }
