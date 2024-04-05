@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class MovieController {
 
   private final MovieService movieService;
+  private static final String ERROR_NOT_FOUND = "Movie or TV Show not found";
 
   @GetMapping
   public ResponseEntity<SuccessResponse<List<Movie>>> getAllMovies(
@@ -68,7 +69,7 @@ public class MovieController {
     Optional<Movie> movie = movieService.getMovieById(id);
 
     if (movie.isEmpty()) {
-      ErrorResponse<String> response = new ErrorResponse<>("Movie or TV Show not found");
+      ErrorResponse<String> response = new ErrorResponse<>(ERROR_NOT_FOUND);
       return new ResponseEntity<ErrorResponse<String>>(response, HttpStatus.NOT_FOUND);
     }
 
@@ -140,7 +141,7 @@ public class MovieController {
     Optional<Movie> existingMovie = movieService.getMovieById(id);
 
     if (existingMovie.isEmpty()) {
-      ErrorResponse<String> response = new ErrorResponse<>("Movie or TV Show not found");
+      ErrorResponse<String> response = new ErrorResponse<>(ERROR_NOT_FOUND);
       return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
@@ -210,7 +211,7 @@ public class MovieController {
     String status = movieService.deleteMovie(id);
 
     if (status.equals("fail")) {
-      ErrorResponse<String> response = new ErrorResponse<>("Movie or TV Show not found");
+      ErrorResponse<String> response = new ErrorResponse<>(ERROR_NOT_FOUND);
       return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
