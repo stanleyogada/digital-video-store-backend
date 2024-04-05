@@ -14,8 +14,12 @@ public class MovieService {
 
   private final MovieRepository movieRepository;
 
-  public List<Movie> getAllMovies() {
-    return movieRepository.findAll();
+  public List<Movie> getAllMovies(boolean isFeatured, boolean isTvShow) {
+    return movieRepository.findByIsFeaturedAndIsTvShow(isFeatured, isTvShow);
+  }
+
+  public List<Movie> getAllMovies(boolean isTvShow) {
+    return movieRepository.findByIsTvShow(isTvShow);
   }
 
   public Optional<Movie> getMovieById(String id) {

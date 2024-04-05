@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,10 +26,30 @@ public class MovieController {
   private final MovieService movieService;
 
   @GetMapping
-  public ResponseEntity<SuccessResponse<List<Movie>>> getAllMovies() {
-    List<Movie> movies = movieService.getAllMovies();
-    SuccessResponse<List<Movie>> response = new SuccessResponse<>(movies);
+  public ResponseEntity<SuccessResponse<List<Movie>>> getAllMovies(
+      @RequestParam(name = "is_tv_show", required = false) Boolean isTvShow,
+      @RequestParam(name = "is_featured", required = false) Boolean isFeatured) {
 
+    if (isTvShow != null && isFeatured == null) {
+      List<Movie> movies = movieService.getAllMovies(isTvShow);
+      SuccessResponse<List<Movie>> response = new SuccessResponse<>(movies);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    if (isTvShow == null && isFeatured == null) {
+      List<Movie> movies = movieService.getAllMovies(false);
+      SuccessResponse<List<Movie>> response = new SuccessResponse<>(movies);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    if (isTvShow == null) {
+      List<Movie> movies = movieService.getAllMovies(isFeatured, false);
+      SuccessResponse<List<Movie>> response = new SuccessResponse<>(movies);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    List<Movie> movies = movieService.getAllMovies(isFeatured, true);
+    SuccessResponse<List<Movie>> response = new SuccessResponse<>(movies);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
