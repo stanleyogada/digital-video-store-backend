@@ -92,6 +92,18 @@ public class MovieController {
     String posterImg = movie.getPosterImg();
     String posterLargeImg = movie.getPosterLargeImg();
 
+    // Check if isTvShow is provided
+    if (!movie.isTvShow()) {
+      ErrorResponse<String> response = new ErrorResponse<>("isTvShow field is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // Check if isFeatured is provided
+    if (!movie.isFeatured()) {
+      ErrorResponse<String> response = new ErrorResponse<>("isFeatured field is required");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     if (name == null || name.isEmpty()) {
       ErrorResponse<String> response = new ErrorResponse<>("Movie name is required");
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
