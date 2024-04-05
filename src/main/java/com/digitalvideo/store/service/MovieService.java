@@ -29,4 +29,19 @@ public class MovieService {
   public Optional<Movie> getMovieById(String id) {
     return movieRepository.findById(id);
   }
+
+  public Movie createMovie(Movie movie) {
+    Movie newMovie = new Movie();
+
+    newMovie.setName(movie.getName());
+    newMovie.setSynopsis(movie.getSynopsis());
+    newMovie.setPriceRent(movie.getPriceRent());
+    newMovie.setPriceBuy(movie.getPriceBuy());
+    newMovie.setPosterImg(movie.getPosterImg());
+    newMovie.setPosterLargeImg(movie.getPosterLargeImg());
+    newMovie.setIsTvShow(movie.isTvShow());
+    newMovie.setIsFeatured(movie.isFeatured());
+
+    return movieRepository.save(newMovie);
+  }
 }

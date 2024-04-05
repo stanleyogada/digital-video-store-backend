@@ -3,6 +3,7 @@ package com.digitalvideo.store.controller;
 import com.digitalvideo.store.model.Movie;
 import com.digitalvideo.store.service.MovieService;
 import com.digitalvideo.store.types.ErrorResponse;
+import com.digitalvideo.store.types.MovieRequest;
 import com.digitalvideo.store.types.SuccessResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,5 +68,20 @@ public class MovieController {
 
     SuccessResponse<Optional<Movie>> response = new SuccessResponse<>(movie);
     return new ResponseEntity<SuccessResponse<Optional<Movie>>>(response, HttpStatus.OK);
+  }
+
+  @PostMapping
+  public ResponseEntity<?> createMovie(@RequestBody Movie movie) {
+    try {
+
+      System.out.println("Movie: " + movie.toString());
+
+      Movie createdMovie = movieService.createMovie(movie);
+      SuccessResponse<Movie> response = new SuccessResponse<>(createdMovie);
+      return new ResponseEntity<>(response, HttpStatus.CREATED);
+    } catch (Exception e) {
+      ErrorResponse<String> response = new ErrorResponse<>("Failed to create movie: " + e.getMessage());
+      return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
