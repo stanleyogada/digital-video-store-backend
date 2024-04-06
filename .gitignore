@@ -34,4 +34,5 @@ build/
 
 
 ### Environtment Files ##
-.env
+src/main/resources/.env
+src/test/resources/.env-docker
