@@ -21,9 +21,7 @@ public class AuthService {
       return null;
     }
 
-    boolean isPasswordMatch = user.get().getPassword().equals(
-        // hashedPassword
-        password);
+    boolean isPasswordMatch = user.get().getPassword().equals(password);
 
     if (!isPasswordMatch) {
       return null;
@@ -33,7 +31,6 @@ public class AuthService {
   }
 
   public User registerUser(User user) {
-
     User newUser = new User();
 
     newUser.setEmail(user.getEmail());
