@@ -116,12 +116,12 @@ public class MovieController {
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    if (!movie.isTvShow()) {
+    if (!movie.isTvShow() && movie.isTvShow() != false) {
       ErrorResponse<String> response = new ErrorResponse<>("isTvShow field is required");
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    if (!movie.isFeatured()) {
+    if (!movie.isFeatured() && movie.isFeatured() != false) {
       ErrorResponse<String> response = new ErrorResponse<>("isFeatured field is required");
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
