@@ -30,6 +30,10 @@ public class MovieService {
     return movieRepository.findById(id);
   }
 
+  public Optional<Movie> getMovieByName(String name) {
+    return movieRepository.findByName(name);
+  }
+
   public Movie createMovie(Movie movie) {
     Movie newMovie = new Movie();
 

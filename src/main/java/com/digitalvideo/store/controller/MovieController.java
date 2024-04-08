@@ -147,8 +147,9 @@ public class MovieController {
 
     String name = movie.getName();
 
-    List<Movie> movies = movieService.searchMoviesByTitle(name);
-    if (movies.size() > 0 && !movies.get(0).getName().equals(name)) {
+    existingMovie = movieService.getMovieByName(name);
+
+    if (existingMovie.isPresent() && !existingMovie.get().getId().equals(id)) {
       ErrorResponse<String> response = new ErrorResponse<>(
           "Change the name to something else a movie has this already");
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -205,7 +206,6 @@ public class MovieController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  // Delete by id
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteMovie(@PathVariable String id) {
     String status = movieService.deleteMovie(id);
