@@ -23,6 +23,6 @@ A project assignment to demonstrate Java Spring Boot with MongoDB skills
 
 1. `java -jar ./target/digitalstore.jar`
 
-#### Then visit `http:localhost:8080/api/v1/movies`
+##### Then visit `http:localhost:8080/api/v1/movies`
 
-#### [See API documentation =>](https://documenter.getpostman.com/view/11253311/2sA35LUyeG)
+##### [See API documentation =>](https://documenter.getpostman.com/view/11253311/2sA35LUyeG)
