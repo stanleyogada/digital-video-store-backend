@@ -4,7 +4,7 @@
 A project assignment to demonstrate Java Spring Boot with MongoDB skills
 
 ## Usage
-1. `git clone https://github.com/dray/digital-video-store-backend`: TODO change this to Dray's real username
+1. `git clone https://github.com/eoakinleye/digital-video-store-backend`: TODO change this to Dray's real username
 2. Enter or `cd` into the project's directory
 3. `./mvnw clean`
 4. `./mvnw clean install`
